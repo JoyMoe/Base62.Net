@@ -1,0 +1,49 @@
+version: 1.0.0
+init:
+  - if %APPVEYOR_REPO_TAG%==false (appveyor UpdateBuild -Version "%APPVEYOR_BUILD_VERSION%-build%APPVEYOR_BUILD_NUMBER%")
+skip_branch_with_pr: true
+image: Visual Studio 2017
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+install:
+  - nuget restore
+nuget:
+  account_feed: true
+  project_feed: true
+  disable_publish_on_pr: true
+configuration: Release
+build:
+  parallel: true
+  publish_nuget: true
+  publish_nuget_symbols: true
+  include_nuget_references: true
+  verbosity: normal
+after_build:
+  - 7z a Base62.zip %APPVEYOR_BUILD_FOLDER%\src\*\bin\Release\*
+artifacts:
+  - path: Base62.zip
+    name: Base62
+deploy:
+  - provider: NuGet
+    api_key:
+      secure: hlXcZvtDMrXri4zKRUH4YQKorCKW+a5QHDxfbgtguMxIqvbtk7lmU9oYg2nHwt3G
+    on:
+      branch: master
+  - provider: NuGet
+    api_key:
+      secure: hlXcZvtDMrXri4zKRUH4YQKorCKW+a5QHDxfbgtguMxIqvbtk7lmU9oYg2nHwt3G
+    on:
+      appveyor_repo_tag: true
+  - provider: GitHub
+    description: AppVeyor CI deployment
+    auth_token:
+      secure: 49h1/SXggw6sDLDix121vnZO1XeUqNJkKUDEwx+QdHQJzEJwO2bgRqOs6HPNDExh
+    artifact: Base62
+    draft: false
+    prerelease: false
+    force_update: true
+    on:
+      appveyor_repo_tag: true

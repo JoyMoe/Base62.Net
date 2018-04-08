@@ -9,11 +9,11 @@
     <PackageTags>base62,conversion</PackageTags>
     <PackOnBuild>true</PackOnBuild>
     <Authors>Mengye Ren,Daniel Destouche,Chino Chang</Authors>
-    <PackageId>Base62.Net</PackageId>
+    <PackageId>Base62-Net</PackageId>
     <PackageVersion>1.0.0</PackageVersion>
     <PackageProjectUrl>https://github.com/JoyMoe/Base62.Net</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/JoyMoe/Base62.Net/blob/master/LICENSE</PackageLicenseUrl>
-    <Title>Base62</Title>
+    <Title>Base62.Net</Title>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net462' or '$(TargetFramework)' == 'net452'">
