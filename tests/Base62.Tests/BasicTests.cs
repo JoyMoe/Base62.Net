@@ -9,8 +9,8 @@ namespace Base62.Tests
         public void Test1()
         {
             byte[] x = { 128, 128, 128, 128, 128, 128 };
-            string s = x.ToBase62();
-            byte[] x2 = s.FromBase62();
+            var s = x.ToBase62();
+            var x2 = s.FromBase62();
             Assert.True(x.SequenceEqual(x2));
         }
     }

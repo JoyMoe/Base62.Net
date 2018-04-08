@@ -1,112 +1,74 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Base62
 {
     public static class EncodingExtensions
     {
-        private static string Base62CodingSpace = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        private const string DefaultCharacterSet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        private const string InvertedCharacterSet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         /// <summary>
         /// Convert a byte array
         /// </summary>
         /// <param name="original">Byte array</param>
+        /// <param name="inverted">Use inverted character set</param>
         /// <returns>Base62 string</returns>
-        public static string ToBase62(this byte[] original)
+        public static string ToBase62(this byte[] original, bool inverted = false)
         {
-            StringBuilder sb = new StringBuilder();
-            BitStream stream = new BitStream(original);         // Set up the BitStream
-            byte[] read = new byte[1];                          // Only read 6-bit at a time
-            while (true)
+            var characterSet = inverted ? InvertedCharacterSet : DefaultCharacterSet;
+            var arr = original.Select(x => (int)x).ToArray();
+
+            var converted = BaseConvert(arr, 256, 62);
+            var builder = new StringBuilder();
+            foreach (var t in converted)
             {
-                read[0] = 0;
-                int length = stream.Read(read, 0, 6);           // Try to read 6 bits
-                if (length == 6)                                // Not reaching the end
-                {
-                    if ((int)(read[0] >> 3) == 0x1f)            // First 5-bit is 11111
-                    {
-                        sb.Append(Base62CodingSpace[61]);
-                        stream.Seek(-1, SeekOrigin.Current);    // Leave the 6th bit to next group
-                    }
-                    else if ((int)(read[0] >> 3) == 0x1e)       // First 5-bit is 11110
-                    {
-                        sb.Append(Base62CodingSpace[60]);
-                        stream.Seek(-1, SeekOrigin.Current);
-                    }
-                    else                                        // Encode 6-bit
-                    {
-                        sb.Append(Base62CodingSpace[(int)(read[0] >> 2)]);
-                    }
-                }
-                else if (length == 0)                           // Reached the end completely
-                {
-                    break;
-                }
-                else                                            // Reached the end with some bits left
-                {
-                    // Padding 0s to make the last bits to 6 bit
-                    sb.Append(Base62CodingSpace[(int)(read[0] >> (int)(8 - length))]);
-                    break;
-                }
+                builder.Append(characterSet[t]);
             }
-            return sb.ToString();
+            return builder.ToString();
         }
 
         /// <summary>
         /// Convert a Base62 string to byte array
         /// </summary>
         /// <param name="base62">Base62 string</param>
+        /// <param name="inverted">Use inverted character set</param>
         /// <returns>Byte array</returns>
-        public static byte[] FromBase62(this string base62)
+        public static IEnumerable<byte> FromBase62(this string base62, bool inverted = false)
         {
-            // Character count
-            int count = 0;
+            var characterSet = inverted ? InvertedCharacterSet : DefaultCharacterSet;
+            var arr = base62.Select(x => characterSet.IndexOf(x)).ToArray();
+            
+            var converted = BaseConvert(arr, 62, 256);
+            return converted.Select(Convert.ToByte).ToArray();
+        }
 
-            // Set up the BitStream
-            BitStream stream = new BitStream(base62.Length * 6 / 8);
-
-            foreach (char c in base62)
+        private static IEnumerable<int> BaseConvert(int[] source, int sourceBase, int targetBase)
+        {
+            var result = new List<int>();
+            int count;
+            while ((count = source.Length) > 0)
             {
-                // Look up coding table
-                int index = Base62CodingSpace.IndexOf(c);
-
-                // If end is reached
-                if (count == base62.Length - 1)
+                var quotient = new List<int>();
+                var remainder = 0;
+                for (var i = 0; i != count; i++)
                 {
-                    // Check if the ending is good
-                    int mod = (int)(stream.Position % 8);
-                    if (mod == 0)
-                        throw new InvalidDataException("an extra character was found");
-
-                    if ((index >> (8 - mod)) > 0)
-                        throw new InvalidDataException("invalid ending character was found");
-
-                    stream.Write(new byte[] { (byte)(index << mod) }, 0, 8 - mod);
-                }
-                else
-                {
-                    // If 60 or 61 then only write 5 bits to the stream, otherwise 6 bits.
-                    if (index == 60)
+                    var accumulator = source[i] + remainder * sourceBase;
+                    var digit = accumulator / targetBase;
+                    remainder = accumulator % targetBase;
+                    if (quotient.Count > 0 || digit > 0)
                     {
-                        stream.Write(new byte[] { 0xf0 }, 0, 5);
-                    }
-                    else if (index == 61)
-                    {
-                        stream.Write(new byte[] { 0xf8 }, 0, 5);
-                    }
-                    else
-                    {
-                        stream.Write(new byte[] { (byte)index }, 2, 6);
+                        quotient.Add(digit);
                     }
                 }
-                count++;
+
+                result.Insert(0, remainder);
+                source = quotient.ToArray();
             }
 
-            // Dump out the bytes
-            byte[] result = new byte[stream.Position / 8];
-            stream.Seek(0, SeekOrigin.Begin);
-            stream.Read(result, 0, result.Length * 8);
-            return result;
+            return result.ToArray();
         }
     }
 }
