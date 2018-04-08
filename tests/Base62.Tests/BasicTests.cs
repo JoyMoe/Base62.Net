@@ -8,8 +8,9 @@ namespace Base62.Tests
         [Fact]
         public void Test1()
         {
-            byte[] x = { 128, 128, 128, 128, 128, 128 };
+            byte[] x = {128, 128, 128, 128, 128, 128};
             var s = x.ToBase62();
+            Assert.Equal("e7Thjuc4", s);
             var x2 = s.FromBase62();
             Assert.True(x.SequenceEqual(x2));
         }

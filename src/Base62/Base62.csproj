@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>Base62 Encoding for .Net</Description>
-    <TargetFrameworks>net452;net462;netstandard1.5;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net452;net462;netstandard2.0</TargetFrameworks>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <Version>1.0.0</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

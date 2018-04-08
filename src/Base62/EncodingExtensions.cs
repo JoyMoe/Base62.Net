@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Base62
@@ -19,7 +18,7 @@ namespace Base62
         public static string ToBase62(this byte[] original, bool inverted = false)
         {
             var characterSet = inverted ? InvertedCharacterSet : DefaultCharacterSet;
-            var arr = original.Select(x => (int)x).ToArray();
+            var arr = Array.ConvertAll(original, t => (int) t);
 
             var converted = BaseConvert(arr, 256, 62);
             var builder = new StringBuilder();
@@ -36,16 +35,16 @@ namespace Base62
         /// <param name="base62">Base62 string</param>
         /// <param name="inverted">Use inverted character set</param>
         /// <returns>Byte array</returns>
-        public static IEnumerable<byte> FromBase62(this string base62, bool inverted = false)
+        public static byte[] FromBase62(this string base62, bool inverted = false)
         {
             var characterSet = inverted ? InvertedCharacterSet : DefaultCharacterSet;
-            var arr = base62.Select(x => characterSet.IndexOf(x)).ToArray();
-            
+            var arr = Array.ConvertAll(base62.ToCharArray(), characterSet.IndexOf);
+
             var converted = BaseConvert(arr, 62, 256);
-            return converted.Select(Convert.ToByte).ToArray();
+            return Array.ConvertAll(converted, Convert.ToByte);
         }
 
-        private static IEnumerable<int> BaseConvert(int[] source, int sourceBase, int targetBase)
+        private static int[] BaseConvert(int[] source, int sourceBase, int targetBase)
         {
             var result = new List<int>();
             int count;

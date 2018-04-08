@@ -12,7 +12,6 @@ Special thanks to [Mengye Ren](https://github.com/renmengye) and his [base62-csh
 [![NuGet](https://img.shields.io/nuget/vpre/Base62-Net.svg)](https://www.nuget.org/packages/Base62-Net/absoluteLatest)
 ![net452](https://img.shields.io/badge/.Net-4.5.2-brightgreen.svg)
 ![net462](https://img.shields.io/badge/.Net-4.6.2-brightgreen.svg)
-![netstandard1.5](https://img.shields.io/badge/.Net-netstandard1.5-brightgreen.svg)
 ![netstandard2.0](https://img.shields.io/badge/.Net-netstandard2.0-brightgreen.svg)
 
 Example
