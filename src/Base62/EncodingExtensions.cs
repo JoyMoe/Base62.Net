@@ -10,7 +10,72 @@ namespace Base62
         private const string InvertedCharacterSet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         /// <summary>
-        /// Convert a byte array
+        /// Encode a 2-byte number with Base62
+        /// </summary>
+        /// <param name="original">String</param>
+        /// <param name="inverted">Use inverted character set</param>
+        /// <returns>Base62 string</returns>
+        public static string ToBase62(this short original, bool inverted = false)
+        {
+            var array = BitConverter.GetBytes(original);
+
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(array);
+            }
+
+            return array.ToBase62(inverted);
+        }
+
+        /// <summary>
+        /// Encode a 4-byte number with Base62
+        /// </summary>
+        /// <param name="original">String</param>
+        /// <param name="inverted">Use inverted character set</param>
+        /// <returns>Base62 string</returns>
+        public static string ToBase62(this int original, bool inverted = false)
+        {
+            var array = BitConverter.GetBytes(original);
+
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(array);
+            }
+
+            return array.ToBase62(inverted);
+        }
+
+        /// <summary>
+        /// Encode a 8-byte number with Base62
+        /// </summary>
+        /// <param name="original">String</param>
+        /// <param name="inverted">Use inverted character set</param>
+        /// <returns>Base62 string</returns>
+        public static string ToBase62(this long original, bool inverted = false)
+        {
+            var array = BitConverter.GetBytes(original);
+
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(array);
+            }
+
+            return array.ToBase62(inverted);
+        }
+
+        /// <summary>
+        /// Encode a string with Base62
+        /// </summary>
+        /// <param name="original">String</param>
+        /// <param name="inverted">Use inverted character set</param>
+        /// <returns>Base62 string</returns>
+        public static string ToBase62(this string original, bool inverted = false)
+        {
+            return Encoding.UTF8.GetBytes(original).ToBase62(inverted);
+        }
+
+        /// <summary>
+        /// Encode a byte array with Base62
         /// </summary>
         /// <param name="original">Byte array</param>
         /// <param name="inverted">Use inverted character set</param>
@@ -29,8 +94,49 @@ namespace Base62
             return builder.ToString();
         }
 
+        
         /// <summary>
-        /// Convert a Base62 string to byte array
+        /// Decode a base62-encoded string
+        /// </summary>
+        /// <param name="base62">Base62 string</param>
+        /// <param name="inverted">Use inverted character set</param>
+        /// <returns>Byte array</returns>
+        public static T FromBase62<T>(this string base62, bool inverted = false)
+        {
+            var array = base62.FromBase62(inverted);
+
+            switch (Type.GetTypeCode(typeof(T)))
+            {
+                case TypeCode.String:
+                    return (T)Convert.ChangeType(Encoding.UTF8.GetString(array), typeof(T));
+                case TypeCode.Int16:
+                    if (BitConverter.IsLittleEndian)
+                    {
+                        Array.Reverse(array);
+                    }
+
+                    return (T)Convert.ChangeType(BitConverter.ToInt16(array, 0), typeof(T));
+                case TypeCode.Int32:
+                    if (BitConverter.IsLittleEndian)
+                    {
+                        Array.Reverse(array);
+                    }
+
+                    return (T)Convert.ChangeType(BitConverter.ToInt32(array, 0), typeof(T));
+                case TypeCode.Int64:
+                    if (BitConverter.IsLittleEndian)
+                    {
+                        Array.Reverse(array);
+                    }
+
+                    return (T)Convert.ChangeType(BitConverter.ToInt64(array, 0), typeof(T));
+                default:
+                    throw new Exception($"Type of {typeof(T)} does not support.");
+            }
+        }
+        
+        /// <summary>
+        /// Decode a base62-encoded string
         /// </summary>
         /// <param name="base62">Base62 string</param>
         /// <param name="inverted">Use inverted character set</param>
