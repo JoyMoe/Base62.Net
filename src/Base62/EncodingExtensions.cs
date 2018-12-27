@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Base62
@@ -153,6 +154,7 @@ namespace Base62
         private static int[] BaseConvert(int[] source, int sourceBase, int targetBase)
         {
             var result = new List<int>();
+            var leadingZeroCount = source.TakeWhile(x => x == 0).Count();
             int count;
             while ((count = source.Length) > 0)
             {
@@ -172,7 +174,7 @@ namespace Base62
                 result.Insert(0, remainder);
                 source = quotient.ToArray();
             }
-
+            result.InsertRange(0, Enumerable.Repeat(0, leadingZeroCount));
             return result.ToArray();
         }
     }
