@@ -46,5 +46,14 @@ namespace Base62.Tests
             var i = "14q60P".FromBase62<int>();
             Assert.Equal(987654321, i);
         }
+
+        [Fact]
+        public void ByteArrayConversionIdentityTest()
+        {
+            var bytes = new byte[] { 0, 0, 0, 128, 128, 0, 0, 1, 2, 3, 0, 0, 0 };
+            string s = bytes.ToBase62();
+            byte[] back = s.FromBase62();
+            Assert.Equal(bytes, back);
+        }
     }
 }
