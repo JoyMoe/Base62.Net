@@ -1,26 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Base62 Encoding for .Net</Description>
-    <TargetFrameworks>net452;net462;netstandard2.0</TargetFrameworks>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <Version>1.0.0</Version>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageTags>base62,conversion</PackageTags>
-    <PackOnBuild>true</PackOnBuild>
     <Authors>Mengye Ren,Daniel Destouche,Chino Chang</Authors>
-    <PackageId>Base62-Net</PackageId>
-    <PackageVersion>1.0.0</PackageVersion>
-    <PackageProjectUrl>https://github.com/JoyMoe/Base62.Net</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/JoyMoe/Base62.Net/blob/master/LICENSE</PackageLicenseUrl>
-    <Title>Base62.Net</Title>
-  </PropertyGroup>
+    <Description>Base62 Encoding for .Net</Description>
+    <PackageTags>base62,conversion</PackageTags>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net462' or '$(TargetFramework)' == 'net452'">
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+
+    <PackageId>Base62-Net</PackageId>
+
+    <AssemblyName>Base62</AssemblyName>
+    <RootNamespace>Base62</RootNamespace>
+
+    <IsPackable>true</IsPackable>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
 
 </Project>
