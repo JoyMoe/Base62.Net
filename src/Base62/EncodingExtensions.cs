@@ -154,7 +154,7 @@ namespace Base62
         private static int[] BaseConvert(int[] source, int sourceBase, int targetBase)
         {
             var result = new List<int>();
-            var leadingZeroCount = source.TakeWhile(x => x == 0).Count();
+            var leadingZeroCount = Math.Min(source.TakeWhile(x => x == 0).Count(), source.Length - 1);
             int count;
             while ((count = source.Length) > 0)
             {
