@@ -6,8 +6,7 @@ Convert between byte array and base62 string.
 
 Special thanks to [Mengye Ren](https://github.com/renmengye) and his [base62-csharp](https://github.com/renmengye/base62-csharp), and [Daniel Destouche](https://github.com/ghost1face) and his [base62](https://github.com/ghost1face/base62).
 
-[![AppVeyor](https://img.shields.io/appveyor/ci/JoyMoe/base62-net.svg)](https://ci.appveyor.com/project/JoyMoe/base62-net)
-[![AppVeyor tests](https://img.shields.io/appveyor/tests/JoyMoe/base62-net.svg)](https://ci.appveyor.com/project/JoyMoe/base62-net)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JoyMoe/Base62.Net/build)](https://ci.appveyor.com/project/JoyMoe/base62-net)
 [![Codecov](https://img.shields.io/codecov/c/github/JoyMoe/Base62.Net.svg)](https://codecov.io/gh/JoyMoe/Base62.Net)
 [![license](https://img.shields.io/github/license/JoyMoe/Base62.Net.svg)](https://github.com/JoyMoe/Base62.Net/blob/master/LICENSE)
 [![NuGet](https://img.shields.io/nuget/v/Base62-Net.svg)](https://www.nuget.org/packages/Base62-Net)

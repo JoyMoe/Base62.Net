@@ -11,10 +11,6 @@
 
     <AssemblyName>Base62</AssemblyName>
     <RootNamespace>Base62</RootNamespace>
-
-    <IsPackable>true</IsPackable>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
 </Project>

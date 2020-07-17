@@ -1,0 +1,13 @@
+<Project>
+
+  <PropertyGroup>
+    <MajorVersion>1</MajorVersion>
+    <MinorVersion>1</MinorVersion>
+    <PatchVersion>2</PatchVersion>
+    <VersionPrefix>$(MajorVersion).$(MinorVersion).$(PatchVersion)</VersionPrefix>
+    <PreReleaseVersionLabel>preview</PreReleaseVersionLabel>
+    <StabilizePackageVersion Condition="'$(StabilizePackageVersion)' == ''">false</StabilizePackageVersion>
+    <DotNetFinalVersionKind Condition="'$(StabilizePackageVersion)' == 'true'">release</DotNetFinalVersionKind>
+  </PropertyGroup>
+
+</Project>
