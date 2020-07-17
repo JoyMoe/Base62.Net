@@ -55,5 +55,25 @@ namespace Base62.Tests
             byte[] back = s.FromBase62();
             Assert.Equal(bytes, back);
         }
+
+        [Fact]
+        public void ByteArrayConversionZeroArray()
+        {
+            var bytes = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            string s = bytes.ToBase62();
+            byte[] back = s.FromBase62();
+            Assert.Equal(bytes.Length, back.Length);
+            Assert.Equal(bytes, back);
+        }
+
+        [Fact]
+        public void ByteArrayConversionAlmostZeroArray()
+        {
+            var bytes = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 };
+            string s = bytes.ToBase62();
+            byte[] back = s.FromBase62();
+            Assert.Equal(bytes.Length, back.Length);
+            Assert.Equal(bytes, back);
+        }
     }
 }
